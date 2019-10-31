@@ -1,18 +1,18 @@
 <employee personnelNumber="1337" gender="m">
-	<name>
-		<titles>
-			<title>Prof.</title>
-			<title>Dr.</title>
-		</titles>
-		<forename>Boba</forename>
-		<surname>Fett</surname>
-	</name>
-	<!-- date is validated, using the YYYY-MM-DD format (@see https://www.w3schools.com/XML/schema_dtypes_date.asp) -->
-	<birthday date="1977-05-04" location="Modesto, California" />
-	<contact>
-		<address>
-			<street houseNumber="1200 - 1298">Tamarind Ave</street>
-			<city postalCode="90038" state="CA">Los Angeles</city>
-		</address>
-	</contact>
+  <name>
+    <titles>
+      <title>Prof.</title>
+      <title>Dr.</title>
+    </titles>
+    <forename>Boba</forename>
+    <surname>Fett</surname>
+  </name>
+  <!-- date is validated, using the YYYY-MM-DD format (@see https://www.w3schools.com/XML/schema_dtypes_date.asp) -->
+  <birthday date="1977-05-04" location="Modesto, California" />
+  <contact>
+    <address>
+      <street houseNumber="1200 - 1298">Tamarind Ave</street>
+      <city postalCode="90038" state="CA">Los Angeles</city>
+    </address>
+  </contact>
 </employee>
