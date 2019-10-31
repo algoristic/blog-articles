@@ -1,81 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns="https://marco-leweke.de/employee"
-	targetNamespace="https://marco-leweke.de/employee"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	elementFormDefault="qualified">
-	<xsd:element name="employee" type="employee" />
+  targetNamespace="https://marco-leweke.de/employee"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified">
+  <xsd:element name="employee" type="employee" />
 
-	<xsd:complexType name="employee">
-		<xsd:sequence>
-			<xsd:element name="name" type="name" />
-			<xsd:element name="birthday" type="birthday" />
-			<xsd:element name="contact" type="contact" />
-		</xsd:sequence>
-		<xsd:attribute name="personnelNumber" type="xsd:int" />
-		<xsd:attribute name="gender">
-			<xsd:simpleType>
-				<xsd:restriction base="xsd:string">
-					<xsd:enumeration value="m" />
-					<xsd:enumeration value="f" />
-					<xsd:enumeration value="d" />
-				</xsd:restriction>
-			</xsd:simpleType>
-		</xsd:attribute>
-	</xsd:complexType>
+  <xsd:complexType name="employee">
+    <xsd:sequence>
+      <xsd:element name="name" type="name" />
+      <xsd:element name="birthday" type="birthday" />
+      <xsd:element name="contact" type="contact" />
+    </xsd:sequence>
+    <xsd:attribute name="personnelNumber" type="xsd:int" />
+    <xsd:attribute name="gender">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="m" />
+          <xsd:enumeration value="f" />
+          <xsd:enumeration value="d" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
 
-	<xsd:complexType name="name">
-		<xsd:sequence>
-			<xsd:element name="titles" type="titles" minOccurs="0" maxOccurs="1" />
-			<xsd:element name="forename" type="xsd:string" minOccurs="1" maxOccurs="1" />
-			<xsd:element name="surname" type="xsd:string" minOccurs="1" maxOccurs="1" />
-		</xsd:sequence>
-	</xsd:complexType>
+  <xsd:complexType name="name">
+    <xsd:sequence>
+      <xsd:element name="titles" type="titles" minOccurs="0" maxOccurs="1" />
+      <xsd:element name="forename" type="xsd:string" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="surname" type="xsd:string" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
 
-	<xsd:complexType name="titles">
-		<xsd:sequence>
-			<xsd:element name="title" minOccurs="0" maxOccurs="unbounded">
-				<xsd:simpleType>
-					<xsd:restriction base="xsd:string">
-						<xsd:enumeration value="Dr." />
-						<xsd:enumeration value="Prof." />
-					</xsd:restriction>
-				</xsd:simpleType>
-			</xsd:element>
-		</xsd:sequence>
-	</xsd:complexType>
+  <xsd:complexType name="titles">
+    <xsd:sequence>
+      <xsd:element name="title" minOccurs="0" maxOccurs="unbounded">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Dr." />
+            <xsd:enumeration value="Prof." />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
 
-	<xsd:complexType name="birthday">
-		<xsd:attribute name="date" type="xsd:date" />
-		<xsd:attribute name="location" type="xsd:string" />
-	</xsd:complexType>
+  <xsd:complexType name="birthday">
+    <xsd:attribute name="date" type="xsd:date" />
+    <xsd:attribute name="location" type="xsd:string" />
+  </xsd:complexType>
 
-	<xsd:complexType name="contact">
-		<xsd:sequence>
-			<xsd:element name="address" type="address" minOccurs="1" maxOccurs="1" />
-		</xsd:sequence>
-	</xsd:complexType>
+  <xsd:complexType name="contact">
+    <xsd:sequence>
+      <xsd:element name="address" type="address" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
 
-	<xsd:complexType name="address">
-		<xsd:sequence>
-			<xsd:element name="street" type="street" />
-			<xsd:element name="city" type="city" />
-		</xsd:sequence>
-	</xsd:complexType>
+  <xsd:complexType name="address">
+    <xsd:sequence>
+      <xsd:element name="street" type="street" />
+      <xsd:element name="city" type="city" />
+    </xsd:sequence>
+  </xsd:complexType>
 
-	<xsd:complexType name="street">
-		<xsd:simpleContent>
-			<xsd:extension base="xsd:string">
-				<xsd:attribute name="houseNumber" type="xsd:string" />
-			</xsd:extension>
-		</xsd:simpleContent>
-	</xsd:complexType>
+  <xsd:complexType name="street">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="houseNumber" type="xsd:string" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
 
-	<xsd:complexType name="city">
-		<xsd:simpleContent>
-			<xsd:extension base="xsd:string">
-				<xsd:attribute name="postalCode" type="xsd:string" />
-				<xsd:attribute name="state" type="xsd:string" />
-			</xsd:extension>
-		</xsd:simpleContent>
-	</xsd:complexType>
+  <xsd:complexType name="city">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="postalCode" type="xsd:string" />
+        <xsd:attribute name="state" type="xsd:string" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
 </xsd:schema>
