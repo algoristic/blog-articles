@@ -22,5 +22,7 @@ The obvious reasons is: there are libraries, that will do that more effiecient a
 
 [//]: # (emph. the benefits: when deriving a xsd from a xml you REALLY have to think about what you do and how to make it extensible for future developments -> also emph.: when building the xsd DON'T try to cover every future case that comes to your mind, that's not necessary! Just implement what your customer needs and implement your structures extensible!)
 
+[//]: # (show how to generate xml and java from xsd with screenshots)
+
 -----
 <sup><a name="footnote-1">1</a></sup> Of course we can archieve that the other way round too. **But** when we start writing our Java classes and annotate them to create a XSD, we will need to make use of third party software that comes as an extra dependency for our application.
