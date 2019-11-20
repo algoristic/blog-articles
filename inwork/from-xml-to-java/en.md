@@ -49,7 +49,7 @@ Why do we use a structure like that one above? There is no benefit in developing
 As you can see, we will define a structure of so called "Complex Types". A complex type is any node that holds a value more complex, than a single `string` or `int`. Our `employee` is such a type, that holds subnodes of `name`, `birthday` and `contact`. Some nodes will have attributes, some not. Most of the XML is self-explaining, but here are some points, that are maybe not:
 - The attribute `gender` of `employee` holds the value of "m" in our example. We will create a XSD that restricts the values of `gender` to `m`, `f` and `d`. That is nice, because it is just semantically correct!. Without any programmed logic we can make sure, that we get only the correct values!
 - The type `titles` of `name` contains a list of `title`. This list consists of any number of titles, from none to infinite and will allow us to display any combination of educational degree. (We will restrict the possible values here to "Prof." and "Dr.", but only because of my lazyness.)
-- The attribute `date` of `birthday` will be automatically validated using the YYYY-MM-DD format (see [w3schools.com/XML/](https://www.w3schools.com/XML/schema_dtypes_date.asp)) for more information on this).
+- The attribute `date` of `birthday` will be automatically validated using the YYYY-MM-DD format (see [w3schools.com/XML](https://www.w3schools.com/XML/schema_dtypes_date.asp)) for more information on this).
 
 [//]: # (### Developing the XSD)
 
