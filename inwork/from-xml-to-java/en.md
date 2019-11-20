@@ -63,4 +63,5 @@ As you can see, we will define a structure of so called "Complex Types". A compl
 
 [//]: # (### Summary)
 -----
+
 <sup><a name="footnote-1">1</a></sup> Of course we can archieve that the other way round too. **But** when we start writing our Java classes and annotate them to create a XSD, we will need to make use of third party software that comes as an extra dependency for our application.
