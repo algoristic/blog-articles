@@ -6,9 +6,9 @@
 # From XML to Java - done right
 ## Don't parse XML yourself: let JAXB do that for you!
 In this tutorial you will learn:
-- how to deserialize XML contens to Java objects and vice versa
+- how to deserialize **XML** contens to Java objects and vice versa
 - how to completely avoid writing your own parser for that purpose (using **JAXB** and the inbuilt features of **Eclipse IDE**)
-- the basics of XSD (XML Schema Definition)
+- the basics of **XSD** (XML Schema Definition)
 
 ## Introduction
 When it comes to data exchange in various cases you will make use of data in XML format. No matter why you are doing so (in many modern applications you will prefer JSON) there is one thing you shouldn't do: **write you own parser**. Man, I mean, we are *flying to Mars*, you shouldn't parse your data *by hand* in 2019...
