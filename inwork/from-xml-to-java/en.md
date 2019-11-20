@@ -4,7 +4,7 @@
 )
 
 # From XML to Java - done right
-## Don't parse XML yourself - let JAXB do that for you!
+## Don't parse XML yourself: let JAXB do that for you!
 In this tutorial you will learn:
 - how to deserialize XML contens to Java objects and vice versa
 - how to completely avoid writing your own parser for that purpose (using **JAXB** and the inbuilt features of **Eclipse IDE**)
