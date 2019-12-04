@@ -227,8 +227,8 @@ JAXB.marshal(employee, new File("path/to/your/output-file")); //write object to 
 To approve our project is working I added two basic tests. The first: unmarshalling an existing XML to an object and checking some of its properties on a random basis. The second: constructing the same structure as object, write it to and XML file, re-reading that file and re-checking its properties. To make this a little shorter I will just link the tests on my [GitHub](place-link-here-when-article-is-moved-to-archive).
 
 ### Summary
-
 To be honest: this isn't the hot stuff. E. g. when you handle information of type date like in this tutorial you will have to handle the class `XMLGregorianCalendar`, which is a _very_ old 'Date' implementation and there are much better alternatives today. **But** this stuff is rock-solid and when you have to maintain and/or update an older Java application it will help you saving much time!
+
 -----
 
 <sup><a name="footnote-1">1</a></sup> Of course we can archieve that the other way round too. **But** when we start writing our Java classes and annotate them to create an XSD, we will need to make use of third party software that comes as an extra dependency for our application.
