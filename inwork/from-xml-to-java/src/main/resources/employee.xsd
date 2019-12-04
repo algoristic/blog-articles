@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="https://marco-leweke.de/employee"
-  targetNamespace="https://marco-leweke.de/employee"
+<xsd:schema xmlns="https://algoristic.de/employee"
+  targetNamespace="https://algoristic.de/employee"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   elementFormDefault="qualified">
   <xsd:element name="employee" type="employee" />
