@@ -1,8 +1,3 @@
-[//]: # (
-    don't forget to add links to all related topics, platforms etc.
-    add prerequisites after finishing the article -> eclipse, xml, basic java
-)
-
 # From XML to Java - done right
 ## Don't parse XML yourself: let JAXB do that for you!
 In this tutorial you will learn:
