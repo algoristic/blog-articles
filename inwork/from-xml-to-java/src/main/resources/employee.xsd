@@ -7,9 +7,9 @@
 
   <xsd:complexType name="employee">
     <xsd:sequence>
-      <xsd:element name="name" type="name" />
-      <xsd:element name="birthday" type="birthday" />
-      <xsd:element name="contact" type="contact" />
+      <xsd:element name="name" type="name" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="birthday" type="birthday" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="contact" type="contact" minOccurs="0" maxOccurs="1" />
     </xsd:sequence>
     <xsd:attribute name="personnelNumber" type="xsd:int" />
     <xsd:attribute name="gender">

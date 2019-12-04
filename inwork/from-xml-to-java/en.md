@@ -30,7 +30,7 @@ We also need data to work with. For that purpose I come up with a poorly designe
 <employee personnelNumber="1337" gender="m">
   <name>
     <titles>
-      <title>Prof.</title>
+      <title>Prof. Dr.</title>
       <title>Dr.</title>
     </titles>
     <forename>Boba</forename>
@@ -52,7 +52,131 @@ As you can see, we will define a structure of so called "Complex Types". A compl
 - The type `titles` of `name` contains a list of `title`. This list consists of any number of titles, from none to infinite and will allow us to display any combination of educational degree. (We will restrict the possible values here to `Prof.` and `Dr.`, but only because of my lazyness.)
 - The attribute `date` of `birthday` will be automatically validated using the `YYYY-MM-DD` format (see [w3schools.com](https://www.w3schools.com/XML/schema_dtypes_date.asp)) for more information on this).
 
-[//]: # (### Developing the XSD)
+### Developing the XSD
+
+The complete XSD is to be found here on my [GitHub](place-link-here-when-article-is-moved-to-archive). I will describe the basics of developing an XSD by using selected examples.
+
+Okay, the start is pretty straight forward, we have to define our namespaces and how the document should be verified. I do that in most cases by the following schema:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="https://marco-leweke.de/employee"
+  targetNamespace="https://marco-leweke.de/employee"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified">
+  <!-- here we are going to define our actual schema -->
+</xsd:schema>
+```
+Here are three things to be recognized:
+1. `xmlns` and `targetNamespace` define the namespace the following rules shall be applied to; I'm very uncreative here...
+1. `xmlns:xsd` defines the one namespace that is to be used in this XML document. In our case that is the XSD namespace itself, using the prefix `xsd` (but you can actually use any prefix here)
+1. `elementFormDefault` defines, if the elements of XML documents that comply with this schema, should all be qualified by this schema. This gets more understandable, when we look at the other way to do this: we could also attribute every element in the schema with `form="qualified"` or leave that out for some elements. The effect would be, that elements attributed with `form=...` would be qualified by our namespace and the ones left out are expected to be in the `null` namespace (and in reality, would just not be qualified...)
+
+Inside this schema we define our elements. We will do that top-down, starting with the type `employee`. There are two basic approaches to define elements with custom types.
+
+The first one is using a nested definition:
+```xml
+<xsd:element name="employee">
+  <xsd:complexType>
+    <xsd:attribute name="personnelNumber" type="xsd:int" />
+  </xsd:complexType>
+</xsd:element>
+```
+The other one uses type definitions in the same document (resembling Java classes in some ways):
+```xml
+<xsd:element name="employee" type="employee" >
+
+<xsd:complexType name="employee">
+  <xsd:attribute name="personnelNumber" type="xsd:int" />
+</xsd:complexType>
+```
+In almost every case I go for the second approach, for reasons of reusability and transparency. (Once I started with a nested structure but the project got a lot bigger than I expected, so I ended up with a complete mess of an XSD file, to finally just rework that with clear type definitions.) So I will stick to that in this tutorial :)
+
+The `employee` has three sub-elements, namely `name`, `birthday` and `contact`, and the two attributes `personnelNumber` and `gender`. Sub-elements get defined like this:
+```xml
+<xsd:complexType name="employee">
+  <xsd:sequence>
+    <xsd:element name="name" type="name" minOccurs="1" maxOccurs="1" />
+    <xsd:element name="birthday" type="birthday" minOccurs="1" maxOccurs="1" />
+    <xsd:element name="contact" type="contact" minOccurs="0" maxOccurs="1" />
+  </xsd:sequence>
+</xsd:complexType>
+```
+When defining sub-elements we always need a `xsd:sequence`, even if there is just one element. We define `name` and `type` like with our first type ('employee') and I highly recommend you to make use of `minOccurs` and `maxOccurs` wherever you can. `minOccurs="0"` tells us, that this element is optional, whilst `minOccurs="1"` obviously means, that this element is required. `maxOccurs="1"` restricts the appearances of this element to _1_, making it a simple property inside a class, thinking in Java references. So `maxOccurs="unbounded"` makes it a List, when translating to Java. Since this are some of the basic components _POJOs_ are made of, you should definitely remember this.
+
+We begin defining the element `name`. As we remember, `name` should consist of a simple forename, surname and a list of titles, so we go for it:
+
+```xml
+<xsd:complexType name="name">
+  <xsd:sequence>
+    <xsd:element name="titles" type="titles" minOccurs="0" maxOccurs="1" />
+    <xsd:element name="forename" type="xsd:string" minOccurs="1" maxOccurs="1" />
+    <xsd:element name="surname" type="xsd:string" minOccurs="1" maxOccurs="1" />
+  </xsd:sequence>
+</xsd:complexType>
+```
+`forename` and `surname` are an easy one: `minOccurs="1" maxOccurs="1"` says, this elements are required and have a single occurence; `type="xsd:string"` tells us we are using a **primitive type** here, instead of our complex types. XSD provides many primitive types, like `xsd:string`, `xsd:int` and `xsd:boolean` but also more specific types like `xsd:date`<sup>[2](#footnote-2)</sup> or `xsd:dateTime`. Eclipse has a nice content assistant here for your relief. I encapsulate `titles` in a complex type instead of using the definition `<xsd:element name="title" minOccurs="0" maxOccurs="unbounded"/>` directly here, because that would produce a list of `title`s on the same layer as fore- and surname and would look like this:
+```xml
+<name>
+  <title>Prof. Dr.</title>
+  <title>Dr.</title>
+  <forename>Boba</forename>
+  <surname>Fett</surname>
+</name>
+```
+This is obviously not that nice. When defining `types` and `type` as complex type we we will make use of the next interesting technique: **value restritions**. They look like this:
+```xml
+<xsd:complexType name="titles">
+  <xsd:sequence>
+    <xsd:element name="title" minOccurs="0" maxOccurs="unbounded">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="Dr." />
+          <xsd:enumeration value="Prof. Dr." />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:element>
+  </xsd:sequence>
+</xsd:complexType>
+```
+I think after seeing some XSD, this is self-explaining. `title` is obviously a primitive type, because we want to store literal values in it. It is convention to nest the restriction itself inside a `xsd:simpleType` element. By the way: `xsd:complexType` allows no restrictions. With `xsd:restriction base="xsd:string"` we define our datatype and enumerate our allowed values inside that element. When we want to allow more titles, we just have to extend that list.
+
+With the lessons above we can construct most of our XSD now, describe our XML. Only one thing left: attributes. Adding the attribute `personnelNumber` our type `employee` will look like this:
+```xml
+<xsd:complexType name="employee">
+  <xsd:sequence>
+    <xsd:element name="name" type="name" minOccurs="1" maxOccurs="1" />
+    <xsd:element name="birthday" type="birthday" minOccurs="1" maxOccurs="1" />
+    <xsd:element name="contact" type="contact" minOccurs="0" maxOccurs="1" />
+  </xsd:sequence>
+  <xsd:attribute name="personnelNumber" type="xsd:int" />
+</xsd:complexType>
+```
+Attributes are to be defined inside the type definition, **below** the sequence of elements (if there is one). They can be restricted to certain values just like elements with the same syntax:
+```xml
+<xsd:attribute name="gender">
+  <xsd:simpleType>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="m" />
+      <xsd:enumeration value="f" />
+      <xsd:enumeration value="d" />
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:attribute>
+```
+Just one thing that is interesting: Inside complex types, the definition of attributes is a no-brainer. But what's about the elements `street` and `city` in the XML structure? They have simple content and yet also attributes. That can be done, using the following tweak:
+```xml
+<xsd:complexType name="street">
+  <xsd:simpleContent>
+    <xsd:extension base="xsd:string">
+      <xsd:attribute name="houseNumber" type="xsd:string" />
+    </xsd:extension>
+  </xsd:simpleContent>
+</xsd:complexType>
+```
+So we just make it a complex type, having simple content. `<xsd:extension base="xsd:string">` tells us, of what type the simple content is. And within that, we define our attributes. That is, admittedly, a little awkward... I always struggle remembering it.
+
+But that's it. With this basics you can construct an XSD for most XML files. When you want to have a look at the complete XSD from our example or you just need a reference, you can get it in my [GitHub](place-link-here-when-article-is-moved-to-archive).
 
 [//]: # (### Generating Classes and XML)
 
@@ -66,3 +190,5 @@ As you can see, we will define a structure of so called "Complex Types". A compl
 -----
 
 <sup><a name="footnote-1">1</a></sup> Of course we can archieve that the other way round too. **But** when we start writing our Java classes and annotate them to create an XSD, we will need to make use of third party software that comes as an extra dependency for our application.
+
+<sup><a name="footnote-2">2</a></sup> I make use of `xsd:date` to define the element `birthday`. You can look that up in my [GitHub](place-link-here-when-article-is-moved-to-archive) as mentioned before.
