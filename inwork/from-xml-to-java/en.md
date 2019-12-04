@@ -50,7 +50,7 @@ Why do we use a structure like that one above? There is no benefit in developing
 As you can see, we will define a structure of so called "Complex Types". A complex type is any node that holds a value more complex, than a single `string` or `int`. Our `employee` is such a type, that holds subnodes of `name`, `birthday` and `contact`. Some nodes will have attributes, some not. Most of the XML is self-explaining, but here are some points, that are maybe not:
 - The attribute `gender` of `employee` holds the value of `m` in our example. We will create an XSD that restricts the values of `gender` to `m`, `f` and `d`. That is nice, because it is just semantically correct!. Without any programmed logic we can make sure, that we get only the correct values!
 - The type `titles` of `name` contains a list of `title`. This list consists of any number of titles, from none to infinite and will allow us to display any combination of educational degree. (We will restrict the possible values here to `Prof.` and `Dr.`, but only because of my lazyness.)
-- The attribute `date` of `birthday` will be automatically validated using the `YYYY-MM-DD` format (see [w3schools.com](https://www.w3schools.com/XML/schema_dtypes_date.asp)) for more information on this).
+- The attribute `date` of `birthday` will be automatically validated using the `yyyy-MM-dd` format (see [w3schools.com](https://www.w3schools.com/XML/schema_dtypes_date.asp)) for more information on this).
 
 ### Developing the XSD
 
@@ -60,8 +60,8 @@ Okay, the start is pretty straight forward, we have to define our namespaces and
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="https://marco-leweke.de/employee"
-  targetNamespace="https://marco-leweke.de/employee"
+<xsd:schema xmlns="https://algoristic.de/employee"
+  targetNamespace="https://algoristic.de/employee"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   elementFormDefault="qualified">
   <!-- here we are going to define our actual schema -->
@@ -178,15 +178,57 @@ So we just make it a complex type, having simple content. `<xsd:extension base="
 
 But that's it. With this basics you can construct an XSD for most XML files. When you want to have a look at the complete XSD from our example or you just need a reference, you can get it in my [GitHub](place-link-here-when-article-is-moved-to-archive).
 
-[//]: # (### Generating Classes and XML)
+### Generating Classes and XML
 
-[//]: # (
-    show how to generate xml and java from xsd with screenshots
-)
+After arduously constructing the XSD we come to the easy part! Below is our current project structure:
 
-[//]: # (### Testing)
+![Basic Project Structure](./src/doc/resources/01.png "Basic Project Structure")
 
-[//]: # (### Summary)
+We only have our empty `de.algoristic.tutorials.xml` package and our XSD file at this point. Now make a right click on the XSD file and choose '_Generate_' > '_JAXB Classes..._'.
+
+![Generate Java Classes](./src/doc/resources/02.png "Generate Java Classes")
+
+In the next step, choose your project, your destination package (`de.algoristic.tutorials.xml` in our case), ignore '_Catalog_' and '_Bindings files_', choose '_No Proxy_' and pick some other options (e. g. I will choose '_Suppress generation of file header_' because that always annoys me and '_Suppress generation of package-info.class_'). After JAXB is done, our package looks like this:
+
+![Generated Classes](./src/doc/resources/03.png "Generated Classes")
+
+JAXB translates the type definitions to single classes, if you are interested in the generated structure you can look them up in my [GitHub](place-link-here-when-article-is-moved-to-archive). And that is everything we essentially need to do, to translate XML into Java and the other way round.
+
+To work with XML files you just need to now the following lines of code:
+```java
+Employee employee = JAXB.unmarshal(new File("path/to/your/input-file"), Employee.class); //read in a file
+JAXB.marshal(employee, new File("path/to/your/output-file")); //write object to a file
+```
+
+**Important**: One thing I always stumble upon: to provide the functionality of JAXB always add your namespace at the root node of the XML file to unmarshal! Our example XML from the beginning would now correctly look like this:
+```xml
+<employee xmlns="https://algoristic.de/employee"
+  personnelNumber="1337" gender="m">
+  <name>
+    <titles>
+      <title>Prof. Dr.</title>
+      <title>Dr.</title>
+    </titles>
+    <forename>Boba</forename>
+    <surname>Fett</surname>
+  </name>
+  <birthday date="1977-05-04" location="Modesto, California" />
+  <contact>
+    <address>
+      <street houseNumber="1200 - 1298">Tamarind Ave</street>
+      <city postalCode="90038" state="CA">Los Angeles</city>
+    </address>
+  </contact>
+</employee>
+```
+
+### Testing
+
+To approve our project is working I added two basic tests. The first: unmarshalling an existing XML to an object and checking some of its properties on a random basis. The second: constructing the same structure as object, write it to and XML file, re-reading that file and re-checking its properties. To make this a little shorter I will just link the tests on my [GitHub](place-link-here-when-article-is-moved-to-archive).
+
+### Summary
+
+To be honest: this isn't the hot stuff. E. g. when you handle information of type date like in this tutorial you will have to handle the class `XMLGregorianCalendar`, which is a _very_ old 'Date' implementation and there are much better alternatives today. **But** this stuff is rock-solid and when you have to maintain and/or update an older Java application it will help you saving much time!
 -----
 
 <sup><a name="footnote-1">1</a></sup> Of course we can archieve that the other way round too. **But** when we start writing our Java classes and annotate them to create an XSD, we will need to make use of third party software that comes as an extra dependency for our application.
