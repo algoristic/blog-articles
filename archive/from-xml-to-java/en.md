@@ -5,6 +5,8 @@ In this tutorial you will learn:
 - how to completely avoid writing your own parser for that purpose (using **JAXB** and the inbuilt features of **Eclipse IDE**)
 - the basics of **XSD** (XML Schema Definition)
 
+You can find the complete project on my [GitHub](https://github.com/algoristic/blog-articles/tree/master/archive/from-xml-to-java).
+
 ## Introduction
 When it comes to data exchange in various cases you will make use of data in XML format. No matter why you are doing so (in many modern applications you will prefer JSON) there is one thing you shouldn't do: **write you own parser**. Man, I mean, we are *flying to Mars*, you shouldn't parse your data *by hand* in 2019...
 
@@ -49,7 +51,7 @@ As you can see, we will define a structure of so called "Complex Types". A compl
 
 ### Developing the XSD
 
-The complete XSD is to be found here on my [GitHub](place-link-here-when-article-is-moved-to-archive). I will describe the basics of developing an XSD by using selected examples.
+The complete XSD is to be found [here on my GitHub](https://github.com/algoristic/blog-articles/blob/master/archive/from-xml-to-java/src/main/resources/employee.xsd). I will describe the basics of developing an XSD by using selected examples.
 
 Okay, the start is pretty straight forward, we have to define our namespaces and how the document should be verified. I do that in most cases by the following schema:
 
@@ -171,7 +173,7 @@ Just one thing that is interesting: Inside complex types, the definition of attr
 ```
 So we just make it a complex type, having simple content. `<xsd:extension base="xsd:string">` tells us, of what type the simple content is. And within that, we define our attributes. That is, admittedly, a little awkward... I always struggle remembering it.
 
-But that's it. With this basics you can construct an XSD for most XML files. When you want to have a look at the complete XSD from our example or you just need a reference, you can get it in my [GitHub](place-link-here-when-article-is-moved-to-archive).
+But that's it. With this basics you can construct an XSD for most XML files. When you want to have a look at the complete XSD from our example or you just need a reference, you can get it [on my GitHub](https://github.com/algoristic/blog-articles/blob/master/archive/from-xml-to-java/src/main/resources/employee.xsd).
 
 ### Generating Classes and XML
 
@@ -187,7 +189,7 @@ In the next step, choose your project, your destination package (`de.algoristic.
 
 ![Generated Classes](./src/doc/resources/03.png "Generated Classes")
 
-JAXB translates the type definitions to single classes, if you are interested in the generated structure you can look them up in my [GitHub](place-link-here-when-article-is-moved-to-archive). And that is everything we essentially need to do, to translate XML into Java and the other way round.
+JAXB translates the type definitions to single classes, if you are interested in the generated structure you can look them up in my [GitHub](https://github.com/algoristic/blog-articles/tree/master/archive/from-xml-to-java/src/main/java/de/algoristic/tutorials/xml). And that is everything we essentially need to do, to translate XML into Java and the other way round.
 
 To work with XML files you just need to now the following lines of code:
 ```java
@@ -219,7 +221,7 @@ JAXB.marshal(employee, new File("path/to/your/output-file")); //write object to 
 
 ### Testing
 
-To approve our project is working I added two basic tests. The first: unmarshalling an existing XML to an object and checking some of its properties on a random basis. The second: constructing the same structure as object, write it to and XML file, re-reading that file and re-checking its properties. To make this a little shorter I will just link the tests on my [GitHub](place-link-here-when-article-is-moved-to-archive).
+To approve our project is working I added two basic tests. The first: unmarshalling an existing XML to an object and checking some of its properties on a random basis. The second: constructing the same structure as object, write it to and XML file, re-reading that file and re-checking its properties. To make this a little shorter I will just link the tests [here on my GitHub](https://github.com/algoristic/blog-articles/tree/master/archive/from-xml-to-java/src/test/java/de/algoristic/tutorials/xml).
 
 ### Summary
 To be honest: this isn't the hot stuff. E. g. when you handle information of type date like in this tutorial you will have to handle the class `XMLGregorianCalendar`, which is a _very_ old 'Date' implementation and there are much better alternatives today. **But** this stuff is rock-solid and when you have to maintain and/or update an older Java application it will help you saving much time!
@@ -228,4 +230,4 @@ To be honest: this isn't the hot stuff. E. g. when you handle information of typ
 
 <sup><a name="footnote-1">1</a></sup> Of course we can archieve that the other way round too. **But** when we start writing our Java classes and annotate them to create an XSD, we will need to make use of third party software that comes as an extra dependency for our application.
 
-<sup><a name="footnote-2">2</a></sup> I make use of `xsd:date` to define the element `birthday`. You can look that up in my [GitHub](place-link-here-when-article-is-moved-to-archive) as mentioned before.
+<sup><a name="footnote-2">2</a></sup> I make use of `xsd:date` to define the element `birthday`. You can look that up in my [GitHub](https://github.com/algoristic/blog-articles/blob/master/archive/from-xml-to-java/src/main/resources/employee.xsd) as mentioned before.
