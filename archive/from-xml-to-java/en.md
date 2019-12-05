@@ -15,7 +15,7 @@ The obvious reasons is: there are libraries, that will do that more effiecient a
 ## Tutorial
 #### Method
 1. We start devising an XML structure for our purpose. This is maybe an unpopular approach but definitely has some benefits as you will see.
-1. When we are sure our structure fits our needs, we will derive an XSD. This feels maybe a bit unnatural to you, but in fact it is the equivalent of planning such a structure in Java. **Plus**: When we are done, we have a fixed XSD Structure we can give to any involved party, so the data exchange format is clear to everyone<sup>[1](#footnote-1)</sup>. This is *of course* a requirement, when we want to create an understandable and maintainable application (*believe me*, I worked in a company that used bloated XML files for numerous purposes and had no XSD or DTD anywhere... it's no fun to extend such a structure or just to understand the enviroment that has grown to process those files). Besides: when deriving an XSD from an XML you **really** have to think about what you do and how to make it extensible for future developments without making it too generic or overdevelop it.
+1. When we are sure our structure fits our needs, we will derive an XSD. This feels maybe a bit unnatural to you, but in fact it is the equivalent of planning such a structure in Java. **Plus**: When we are done, we have a fixed XSD Structure we can give to any involved party, so the data exchange format is clear to everyone. This is *of course* a requirement, when we want to create an understandable and maintainable application (*believe me*, I worked in a company that used bloated XML files for numerous purposes and had no XSD or DTD anywhere... it's no fun to extend such a structure or just to understand the enviroment that has grown to process those files). Besides: when deriving an XSD from an XML you **really** have to think about what you do and how to make it extensible for future developments without making it too generic or overdevelop it.
 1. We use the inbuilt features of Eclipse IDE to create our classes.
 1. Profit... ?
 
@@ -112,7 +112,7 @@ We begin defining the element `name`. As we remember, `name` should consist of a
   </xsd:sequence>
 </xsd:complexType>
 ```
-`forename` and `surname` are an easy one: `minOccurs="1" maxOccurs="1"` says, this elements are required and have a single occurence; `type="xsd:string"` tells us we are using a **primitive type** here, instead of our complex types. XSD provides many primitive types, like `xsd:string`, `xsd:int` and `xsd:boolean` but also more specific types like `xsd:date`<sup>[2](#footnote-2)</sup> or `xsd:dateTime`. Eclipse has a nice content assistant here for your relief. I encapsulate `titles` in a complex type instead of using the definition `<xsd:element name="title" minOccurs="0" maxOccurs="unbounded"/>` directly here, because that would produce a list of `title`s on the same layer as fore- and surname and would look like this:
+`forename` and `surname` are an easy one: `minOccurs="1" maxOccurs="1"` says, this elements are required and have a single occurence; `type="xsd:string"` tells us we are using a **primitive type** here, instead of our complex types. XSD provides many primitive types, like `xsd:string`, `xsd:int` and `xsd:boolean` but also more specific types like `xsd:date` or `xsd:dateTime`. Eclipse has a nice content assistant here for your relief. I encapsulate `titles` in a complex type instead of using the definition `<xsd:element name="title" minOccurs="0" maxOccurs="unbounded"/>` directly here, because that would produce a list of `title`s on the same layer as fore- and surname and would look like this:
 ```xml
 <name>
   <title>Prof. Dr.</title>
@@ -225,9 +225,3 @@ To approve our project is working I added two basic tests. The first: unmarshall
 
 ### Summary
 To be honest: this isn't the hot stuff. E. g. when you handle information of type date like in this tutorial you will have to handle the class `XMLGregorianCalendar`, which is a _very_ old 'Date' implementation and there are much better alternatives today. **But** this stuff is rock-solid and when you have to maintain and/or update an older Java application it will help you saving much time!
-
------
-
-<sup><a name="footnote-1">1</a></sup> Of course we can archieve that the other way round too. **But** when we start writing our Java classes and annotate them to create an XSD, we will need to make use of third party software that comes as an extra dependency for our application.
-
-<sup><a name="footnote-2">2</a></sup> I make use of `xsd:date` to define the element `birthday`. You can look that up in my [GitHub](https://github.com/algoristic/blog-articles/blob/master/archive/from-xml-to-java/src/main/resources/employee.xsd) as mentioned before.
