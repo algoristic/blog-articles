@@ -8,7 +8,7 @@ In this tutorial you will learn:
 You can find the complete project on my [GitHub](https://github.com/algoristic/blog-articles/tree/master/archive/from-xml-to-java).
 
 ## Introduction
-When it comes to data exchange in various cases you will make use of data in XML format. No matter why you are doing so (in many modern applications you will prefer JSON) there is one thing you shouldn't do: **write you own parser**. Man, I mean, we are *flying to Mars*, you shouldn't parse your data *by hand* in 2019...
+When it comes to data exchange in various cases you will make use of the XML format. No matter why you are doing so (in many modern applications you will prefer JSON) there is one thing you shouldn't do: **write you own parser**. Man, I mean, we are *flying to Mars*, you shouldn't parse your data *by hand* in 2019...
 
 The obvious reasons is: there are libraries, that will do that more effiecient and reliable. You can do that for a homework in your studies, but when your boss catches you doing that, you are in need of an explanation. So, ~~if you heard of Java SAX Parser~~ we will use JAXB for that.
 
@@ -20,7 +20,7 @@ The obvious reasons is: there are libraries, that will do that more effiecient a
 1. Profit... ?
 
 ### Getting Started
-I prerequisite you have installed and are using Eclipse IDE. If that is not the case, I highly encourage you to do that, because we will make use of one of its' features. I will be using Eclipse IDE 2019-09 (for [Enterprise Java Developers](https://www.eclipse.org/downloads/packages/release/2019-09/r/eclipse-ide-enterprise-java-developers)) because that is the latest version.
+I prerequisite you have installed and are using Eclipse IDE. If that is not the case, I highly encourage you to do that, because we will make use of one of its features. I will be using Eclipse IDE 2019-09 (for [Enterprise Java Developers](https://www.eclipse.org/downloads/packages/release/2019-09/r/eclipse-ide-enterprise-java-developers)) because that is the latest version (right now).
 
 We also need data to work with. For that purpose I come up with a poorly designed XML schema to save information about employees:
 ```xml
@@ -42,11 +42,11 @@ We also need data to work with. For that purpose I come up with a poorly designe
   </contact>
 </employee>
 ```
-Why do we use a structure like that one above? There is no benefit in developing a sophisticated model here, that would just be overengineering... Also: the above model fits my needs: We will need to make use of some basic features of XSD to develop a schema for that structure. These features will allow you to understand the concept of XSD and will allow you to create a schema for most XML you will face.
+Why do we use a structure like that one above? There is no benefit in developing a sophisticated model here, that would just be overengineering... Also: the above model fits my needs: We will need to make use of some basic features of XSD to develop a schema for that structure. These features will allow you to understand the concept of XSD and will allow you to create a schema for most XML you will ever face.
 
-As you can see, we will define a structure of so called "Complex Types". A complex type is any node that holds a value more complex, than a single `string` or `int`. Our `employee` is such a type, that holds subnodes of `name`, `birthday` and `contact`. Some nodes will have attributes, some not. Most of the XML is self-explaining, but here are some points, that are maybe not:
+As you can see, we will define a structure of so called "Complex Types". A complex type is any node that holds a value more complex, than a single `string` or `int`. Our `employee` is such a type, that contains subnodes of `name`, `birthday` and `contact`. Some nodes will have attributes, some not. Most of the XML is self-explaining, but here are some points, that are maybe not:
 - The attribute `gender` of `employee` holds the value of `m` in our example. We will create an XSD that restricts the values of `gender` to `m`, `f` and `d`. That is nice, because it is just semantically correct!. Without any programmed logic we can make sure, that we get only the correct values!
-- The type `titles` of `name` contains a list of `title`. This list consists of any number of titles, from none to infinite and will allow us to display any combination of educational degree. (We will restrict the possible values here to `Prof.` and `Dr.`, but only because of my lazyness.)
+- The type `titles` of `name` contains a list of `title`. This list consists of any number of titles, from none to infinite and will allow us to display any combination of educational degree. (We will restrict the possible values here to `Prof. Dr.` and `Dr.`, but only because of my lazyness.)
 - The attribute `date` of `birthday` will be automatically validated using the `yyyy-MM-dd` format (see [w3schools.com](https://www.w3schools.com/XML/schema_dtypes_date.asp)) for more information on this).
 
 ### Developing the XSD
@@ -89,7 +89,7 @@ The other one uses type definitions in the same document (resembling Java classe
 ```
 In almost every case I go for the second approach, for reasons of reusability and transparency. (Once I started with a nested structure but the project got a lot bigger than I expected, so I ended up with a complete mess of an XSD file, to finally just rework that with clear type definitions.) So I will stick to that in this tutorial :)
 
-The `employee` has three sub-elements, namely `name`, `birthday` and `contact`, and the two attributes `personnelNumber` and `gender`. Sub-elements get defined like this:
+The `employee` has three subelements, namely `name`, `birthday` and `contact`, and the two attributes `personnelNumber` and `gender`. Sub-elements get defined like this:
 ```xml
 <xsd:complexType name="employee">
   <xsd:sequence>
@@ -138,7 +138,7 @@ This is obviously not that nice. When defining `types` and `type` as complex typ
 ```
 I think after seeing some XSD, this is self-explaining. `title` is obviously a primitive type, because we want to store literal values in it. It is convention to nest the restriction itself inside a `xsd:simpleType` element. By the way: `xsd:complexType` allows no restrictions. With `xsd:restriction base="xsd:string"` we define our datatype and enumerate our allowed values inside that element. When we want to allow more titles, we just have to extend that list.
 
-With the lessons above we can construct most of our XSD now, describe our XML. Only one thing left: attributes. Adding the attribute `personnelNumber` our type `employee` will look like this:
+With the lessons above we can construct most of our XSD now, describe our XML. Only one thing left: attributes. Adding the attribute `personnelNumber` to our type `employee` will look like this:
 ```xml
 <xsd:complexType name="employee">
   <xsd:sequence>
@@ -149,7 +149,7 @@ With the lessons above we can construct most of our XSD now, describe our XML. O
   <xsd:attribute name="personnelNumber" type="xsd:int" />
 </xsd:complexType>
 ```
-Attributes are to be defined inside the type definition, **below** the sequence of elements (if there is one). They can be restricted to certain values just like elements with the same syntax:
+Attributes are to be defined inside the type definition, **after** the sequence of subelements (if there is one). They can be restricted to certain values just like elements with the same syntax:
 ```xml
 <xsd:attribute name="gender">
   <xsd:simpleType>
@@ -173,7 +173,7 @@ Just one thing that is interesting: Inside complex types, the definition of attr
 ```
 So we just make it a complex type, having simple content. `<xsd:extension base="xsd:string">` tells us, of what type the simple content is. And within that, we define our attributes. That is, admittedly, a little awkward... I always struggle remembering it.
 
-But that's it. With this basics you can construct an XSD for most XML files. When you want to have a look at the complete XSD from our example or you just need a reference, you can get it [on my GitHub](https://github.com/algoristic/blog-articles/blob/master/archive/from-xml-to-java/src/main/resources/employee.xsd).
+But that's it. With this basics you can construct an XSD for most XML files.
 
 ### Generating Classes and XML
 
@@ -181,7 +181,7 @@ After arduously constructing the XSD we come to the easy part! Below is our curr
 
 ![Basic Project Structure](./src/doc/resources/01.png "Basic Project Structure")
 
-We only have our empty `de.algoristic.tutorials.xml` package and our XSD file at this point. Now make a right click on the XSD file and choose '_Generate_' > '_JAXB Classes..._'.
+We only have our empty `de.algoristic.tutorials.xml` package and our XSD file at this point. Now do a right click on the XSD file and choose '_Generate_' > '_JAXB Classes..._'.
 
 ![Generate Java Classes](./src/doc/resources/02.png "Generate Java Classes")
 
@@ -189,11 +189,11 @@ In the next step, choose your project, your destination package (`de.algoristic.
 
 ![Generated Classes](./src/doc/resources/03.png "Generated Classes")
 
-JAXB translates the type definitions to single classes, if you are interested in the generated structure you can look them up in my [GitHub](https://github.com/algoristic/blog-articles/tree/master/archive/from-xml-to-java/src/main/java/de/algoristic/tutorials/xml). And that is everything we essentially need to do, to translate XML into Java and the other way round.
+JAXB translates the type definitions to single classes, if you are interested in the generated structure you can [look them up in my GitHub](https://github.com/algoristic/blog-articles/tree/master/archive/from-xml-to-java/src/main/java/de/algoristic/tutorials/xml). And that is everything we essentially need to do, to translate XML into Java and the other way round.
 
 To work with XML files you just need to now the following lines of code:
 ```java
-Employee employee = JAXB.unmarshal(new File("path/to/your/input-file"), Employee.class); //read in a file
+Employee employee = JAXB.unmarshal(new File("path/to/your/input-file"), Employee.class); //read an XML file
 JAXB.marshal(employee, new File("path/to/your/output-file")); //write object to a file
 ```
 
@@ -221,7 +221,7 @@ JAXB.marshal(employee, new File("path/to/your/output-file")); //write object to 
 
 ### Testing
 
-To approve our project is working I added two basic tests. The first: unmarshalling an existing XML to an object and checking some of its properties on a random basis. The second: constructing the same structure as object, write it to and XML file, re-reading that file and re-checking its properties. To make this a little shorter I will just link the tests [here on my GitHub](https://github.com/algoristic/blog-articles/tree/master/archive/from-xml-to-java/src/test/java/de/algoristic/tutorials/xml).
+To approve our project is working I added two basic tests. The first: unmarshalling an existing XML to an object and checking some of its properties on a random basis. The second: constructing the same structure as an object, write it to an XML file, re-reading that file and checking its properties. To make this a little shorter I will just link the tests [here on my GitHub](https://github.com/algoristic/blog-articles/tree/master/archive/from-xml-to-java/src/test/java/de/algoristic/tutorials/xml).
 
 ### Summary
 To be honest: this isn't the hot stuff. E. g. when you handle information of type date like in this tutorial you will have to handle the class `XMLGregorianCalendar`, which is a _very_ old 'Date' implementation and there are much better alternatives today. **But** this stuff is rock-solid and when you have to maintain and/or update an older Java application it will help you saving much time!
